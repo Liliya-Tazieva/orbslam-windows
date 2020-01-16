@@ -35,16 +35,16 @@ void LoadImages(const string &strImagePath, const string &strPathTimes,
 
 int main(int argc, char **argv)
 {
-    if(argc != 5)
-    {
-        cerr << endl << "Usage: ./mono_tum path_to_vocabulary path_to_settings path_to_image_folder path_to_times_file" << endl;
-        return 1;
-    }
+	//Initialize input files paths
+	string path_to_vocabulary = "../Vocabulary/ORBvoc.txt";
+	string path_to_settings = "../Examples/Input-Mono/EuRoC.yaml";
+	string path_to_image_folder = "../Examples/Input-Mono/EuRoC/V2_01_easy/cam0/data";
+	string path_to_times_file = "../Examples/Input-Mono/EuRoC_TimeStamps/V201.txt";
 
     // Retrieve paths to images
     vector<string> vstrImageFilenames;
     vector<double> vTimestamps;
-    LoadImages(string(argv[3]), string(argv[4]), vstrImageFilenames, vTimestamps);
+    LoadImages(path_to_image_folder, path_to_times_file, vstrImageFilenames, vTimestamps);
 
     int nImages = vstrImageFilenames.size();
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
     }
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM2::System SLAM(argv[1],argv[2],ORB_SLAM2::System::MONOCULAR,true);
+    ORB_SLAM2::System SLAM(path_to_vocabulary,path_to_settings,ORB_SLAM2::System::MONOCULAR,true);
 
     // Vector for tracking time statistics
     vector<float> vTimesTrack;
@@ -71,6 +71,7 @@ int main(int argc, char **argv)
     {
         // Read image from file
         im = cv::imread(vstrImageFilenames[ni],CV_LOAD_IMAGE_UNCHANGED);
+
         double tframe = vTimestamps[ni];
 
         if(im.empty())
@@ -90,6 +91,7 @@ int main(int argc, char **argv)
         double ttrack= std::chrono::duration_cast<std::chrono::duration<double> >(t2 - t1).count();
 
         vTimesTrack[ni]=ttrack;
+		printf("Time spent on frame %f\n", ttrack);
 
         // Wait to load the next frame
         double T=0;
@@ -119,6 +121,7 @@ int main(int argc, char **argv)
     // Save camera trajectory
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
+	system("pause");
     return 0;
 }
 

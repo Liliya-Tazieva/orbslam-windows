@@ -36,40 +36,32 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	string vocabPath = "../ORBvoc.txt";
-	string settingsPath = "../webcam.yaml";
-	if (argc == 1)
-	{
+	//Initialize input files paths
+	string path_to_vocabulary = "../Vocabulary/ORBvoc.txt";
+	string path_to_settings = "../Examples/Input-Mono/webcam.yaml";
 
-	}
-	else if (argc == 2)
+	cv::VideoCapture cap(1);
+	cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
+	cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+	cap.set(cv::CAP_PROP_FPS, 20);
+	cap.set(cv::CAP_PROP_FORMAT, CV_8UC3);
+	if (!cap.isOpened())
 	{
-		vocabPath = argv[1];
+		printf("ERROR! Wrong camera number %d\n", 1);
+
+		return -1;
+		system("pause");
 	}
-	else if (argc == 3)
-	{
-		vocabPath = argv[1];
-		settingsPath = argv[2];
-	}
-    else
-    {
-        cerr << endl << "Usage: mono_webcam.exe path_to_vocabulary path_to_settings" << endl;
-        return 1;
-    }
 
     // Create SLAM system. It initializes all system threads and gets ready to process frames.
-    ORB_SLAM2::System SLAM(vocabPath, settingsPath,ORB_SLAM2::System::MONOCULAR,true);
+    ORB_SLAM2::System SLAM(path_to_vocabulary, path_to_settings,ORB_SLAM2::System::MONOCULAR,true);
 
     cout << endl << "-------" << endl;
     cout << "Start processing sequence ..." << endl;
-
-	cv::VideoCapture cap(0);
-
-
+	
 	// From http://stackoverflow.com/questions/19555121/how-to-get-current-timestamp-in-milliseconds-since-1970-just-the-way-java-gets
 	__int64 now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-
-
+	
 	// Main loop
 	cv::Mat im;
 	cv::Mat Tcw;
@@ -112,5 +104,6 @@ int main(int argc, char **argv)
     // Save camera trajectory
     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
 
+	system("pause");
     return 0;
 }

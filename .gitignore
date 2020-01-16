@@ -1,4 +1,9 @@
 CMakeLists.txt.user
+Examples/Input-Mono/
+Examples/AR/Release
+Examples/AR/Debug
+Examples/Monocular/Release
+Examples/Monocular/Debug
 Examples/Monocular/mono_euroc
 Examples/Monocular/mono_kitti
 Examples/Monocular/mono_tum
@@ -13,12 +18,13 @@ Examples/Stereo/stereo_euroc
 Examples/Stereo/stereo_kitti
 KeyFrameTrajectory.txt
 Thirdparty/DBoW2/build/
-Thirdparty/DBoW2/lib/
-Thirdparty/g2o/build/
+Thirdparty/DBoW2/lib_dynamic/
+Thirdparty/DBoW2/lib_static/
 Thirdparty/g2o/config.h
-Thirdparty/g2o/lib/
+Thirdparty/g2o/build/
 Vocabulary/ORBvoc.txt
-build/
+build_dynamic/
+build_static/
 *~
 lib/
 

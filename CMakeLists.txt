@@ -46,6 +46,7 @@ ${PROJECT_SOURCE_DIR}
 ${PROJECT_SOURCE_DIR}/include
 ${EIGEN3_INCLUDE_DIR}
 ${Pangolin_INCLUDE_DIRS}
+${PROJECT_SOURCE_DIR}/Examples/AR
 )
 
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
@@ -113,3 +114,17 @@ add_executable(mono_euroc
 Examples/Monocular/mono_euroc.cc)
 target_link_libraries(mono_euroc ${PROJECT_NAME})
 
+add_executable(mono_webcam
+Examples/Monocular/mono_webcam.cc)
+target_link_libraries(mono_webcam ${PROJECT_NAME})
+
+add_executable(mono_euroc_no_viewer
+Examples/Monocular/mono_euroc_no_viewer.cc)
+target_link_libraries(mono_euroc_no_viewer ${PROJECT_NAME})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/Examples/AR)
+
+add_executable(mono_ar
+Examples/AR/mono_ar.cc
+Examples/AR/ViewerAR.cc)
+target_link_libraries(mono_ar ${PROJECT_NAME})
