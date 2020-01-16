@@ -128,6 +128,8 @@ public:
     std::vector<MapPoint*> GetTrackedMapPoints();
     std::vector<cv::KeyPoint> GetTrackedKeyPointsUn();
 
+	FrameDrawer * GetFrameDrawer() { return mpFrameDrawer; }
+
 private:
 
     // Input sensor

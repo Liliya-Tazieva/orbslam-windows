@@ -23,7 +23,13 @@
 #include "System.h"
 #include "Converter.h"
 #include <thread>
+
+#ifdef USE_GUI
 #include <pangolin/pangolin.h>
+#else
+#include <Windows.h>
+#endif
+
 #include <iomanip>
 
 void usleep(__int64 usec)
@@ -108,12 +114,14 @@ System::System(const string &strVocFile, const string &strSettingsFile, const eS
     mptLoopClosing = new thread(&ORB_SLAM2::LoopClosing::Run, mpLoopCloser);
 
     //Initialize the Viewer thread and launch
+	#ifdef USE_GUI
     if(bUseViewer)
     {
         mpViewer = new Viewer(this, mpFrameDrawer,mpMapDrawer,mpTracker,strSettingsFile);
         mptViewer = new thread(&Viewer::Run, mpViewer);
         mpTracker->SetViewer(mpViewer);
     }
+	#endif
 
     //Set pointers between threads
     mpTracker->SetLocalMapper(mpLocalMapper);
@@ -328,8 +336,10 @@ void System::Shutdown()
         usleep(5000);
     }
 
+	#ifdef USE_GUI
     if(mpViewer)
         pangolin::BindToContext("ORB-SLAM2: Map Viewer");
+	#endif
 }
 
 void System::SaveTrajectoryTUM(const string &filename)
